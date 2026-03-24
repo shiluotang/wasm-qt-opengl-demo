@@ -6,12 +6,17 @@
 // 提供 OpenGL API 支持
 #include <QOpenGLFunctions>
 
+QT_FORWARD_DECLARE_CLASS(QWidget);
+
 class MyGLWindow
     : public QOpenGLWindow
     , protected QOpenGLFunctions
 {
 public:
-    MyGLWindow(QWidget *parent = nullptr) : QOpenGLWindow() {}
+    MyGLWindow(QWidget *parent = nullptr)
+        : QOpenGLWindow()
+    {
+    }
 
 protected:
     // 1. 初始化：只運行一次（設定著色器、緩衝區等）
