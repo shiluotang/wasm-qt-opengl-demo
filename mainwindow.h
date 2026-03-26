@@ -1,12 +1,16 @@
 #ifndef MAINWINDOW_H_INCLUDED
 #define MAINWINDOW_H_INCLUDED
 
+#include <iostream>
+
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QWidget>
 
 #include "mywindow.h"
+
+#include "logger.h"
 
 class MainWindow
     : public QMainWindow {
@@ -25,8 +29,12 @@ public:
         // 3. 設置 UI 佈局 (例如加入菜單欄)
         // 如果这里用中文，界面上会变成方框，可能是字体的问题
         QMenu *fileMenu = menuBar()->addMenu("File");
-        fileMenu->addAction("Open");
-
+        QAction *action = fileMenu->addAction("Close");
+        QObject::connect(action, &QAction::triggered, this,
+                [this]() {
+                    LOGD("clicked");
+                    this->close();
+                });
         // 4. 將容器放入中心部件
         QWidget *centralWidget = new QWidget();
         QVBoxLayout *layout = new QVBoxLayout(centralWidget);
