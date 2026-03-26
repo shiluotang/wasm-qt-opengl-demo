@@ -36,7 +36,9 @@ MyGLWindow::~MyGLWindow() {
 
 void MyGLWindow::initializeGL() {
     LOGD(__PRETTY_FUNCTION__);
-    QObject::connect(this, &QOpenGLWindow::frameSwapped, this, QOverload<>::of(&QOpenGLWindow::update));
+    QObject::connect(this, &QOpenGLWindow::frameSwapped, this, [this]() {
+                this->update();
+            });
     // 初始化封裝好的 OpenGL 函數
     initializeOpenGLFunctions();
     // 設定背景色
