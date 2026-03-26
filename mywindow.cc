@@ -99,7 +99,7 @@ void MyGLWindow::resizeGL(int w, int h) {
 
 // 3. 繪圖：每當需要重繪時觸發（類似 GLFW 的 while 循環體）
 void MyGLWindow::paintGL() {
-    LOGD(__PRETTY_FUNCTION__);
+    // LOGD(__PRETTY_FUNCTION__);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _M_prog->bind();
     QMatrix4x4 matrix;
@@ -111,5 +111,5 @@ void MyGLWindow::paintGL() {
     _M_vao.release();
     _M_prog->release();
     update();
-    _M_angle += 0.01;
+    _M_angle += 0.1;
 }
