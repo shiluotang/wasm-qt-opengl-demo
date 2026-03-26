@@ -36,6 +36,7 @@ MyGLWindow::~MyGLWindow() {
 
 void MyGLWindow::initializeGL() {
     LOGD(__PRETTY_FUNCTION__);
+    QObject::connect(this, &QOpenGLWindow::frameSwapped, this, QOverload<>::of(&QOpenGLWindow::update));
     // 初始化封裝好的 OpenGL 函數
     initializeOpenGLFunctions();
     // 設定背景色
@@ -110,6 +111,5 @@ void MyGLWindow::paintGL() {
     glDrawArrays(GL_TRIANGLES, 0, 3);
     _M_vao.release();
     _M_prog->release();
-    update();
     _M_angle += 0.1;
 }
