@@ -1,10 +1,15 @@
 #ifndef MYWINDOW_H_INCLUDED
 #define MYWINDOW_H_INCLUDED
 
+#include <vector>
+
 /* #include <QtOpenGLWidgets/QOpenGLWidget> */
 #include <QtOpenGL/QOpenGLWindow>
 // 提供 OpenGL API 支持
 #include <QOpenGLFunctions>
+#include <QOpenGLVertexArrayObject>
+#include <QOpenGLBuffer>
+#include <QOpenGLShaderProgram>
 
 QT_FORWARD_DECLARE_CLASS(QWidget);
 
@@ -12,33 +17,26 @@ class MyGLWindow
     : public QOpenGLWindow
     , protected QOpenGLFunctions
 {
+    Q_OBJECT
 public:
-    MyGLWindow(QWidget *parent = nullptr)
-        : QOpenGLWindow()
-    {
-    }
+    MyGLWindow(QWidget *parent = nullptr);
+    virtual ~MyGLWindow();
 
 protected:
     // 1. 初始化：只運行一次（設定著色器、緩衝區等）
-    void initializeGL() override {
-        // 初始化封裝好的 OpenGL 函數
-        initializeOpenGLFunctions();
-        // 設定背景色
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    }
+    void initializeGL() override;
 
     // 2. 視窗縮放：當網頁窗口大小改變時觸發
-    void resizeGL(int w, int h) override {
-        glViewport(0, 0, w, h);
-    }
+    void resizeGL(int w, int h) override;
 
     // 3. 繪圖：每當需要重繪時觸發（類似 GLFW 的 while 循環體）
-    void paintGL() override {
-        glClear(GL_COLOR_BUFFER_BIT);
-        // 在這裡寫你的渲染邏輯，例如：
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
-    }
-};
+    void paintGL() override;
 
+private:
+    std::vector<GLfloat> _M_vertices;
+    QOpenGLVertexArrayObject _M_vao;
+    QOpenGLBuffer _M_vbo;
+    QOpenGLShaderProgram *_M_prog;
+};
 
 #endif // MYWINDOW_H_INCLUDED
