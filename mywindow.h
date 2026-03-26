@@ -37,6 +37,7 @@ private:
     QOpenGLVertexArrayObject _M_vao;
     QOpenGLBuffer _M_vbo;
     QOpenGLShaderProgram *_M_prog;
+    double _M_angle;
 };
 
 #endif // MYWINDOW_H_INCLUDED

@@ -16,6 +16,11 @@ class MainWindow
     : public QMainWindow {
 public:
     MainWindow() {
+        // 1 表示開啟 VSync，0 表示關閉
+        QSurfaceFormat format;
+        format.setSwapInterval(1);
+        QSurfaceFormat::setDefaultFormat(format);
+
         // 1. 創建 OpenGL 視窗實例
         MyGLWindow *glWindow = new MyGLWindow();
 

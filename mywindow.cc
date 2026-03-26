@@ -18,6 +18,7 @@ MyGLWindow::MyGLWindow(QWidget *parent)
     , _M_vao()
     , _M_vbo(QOpenGLBuffer::VertexBuffer)
     , _M_prog(0)
+    , _M_angle(0.0)
 {
     LOGD(__PRETTY_FUNCTION__);
 }
@@ -43,19 +44,21 @@ void MyGLWindow::initializeGL() {
 
     _M_prog = new QOpenGLShaderProgram();
     _M_prog->addShaderFromSourceCode(
-            QOpenGLShader::Vertex, 
+            QOpenGLShader::Vertex,
 #ifdef __EMSCRIPTEN__
             "#version 300 es\n"
 #else
             "#version 430 core\n"
 #endif
             "layout(location = 0) in vec3 aPos;\n"
+            // layout on uniform may cause problem
+            "uniform mat4 aMat;"
             "void main() {\n"
-            " gl_Position = vec4(aPos, 1.0);\n" 
+            " gl_Position = aMat * vec4(aPos, 1.0);\n"
             "}\n"
             );
     _M_prog->addShaderFromSourceCode(
-            QOpenGLShader::Fragment, 
+            QOpenGLShader::Fragment,
 #ifdef __EMSCRIPTEN__
             "#version 300 es\n"
             "precision mediump float;\n"
@@ -98,11 +101,15 @@ void MyGLWindow::resizeGL(int w, int h) {
 void MyGLWindow::paintGL() {
     LOGD(__PRETTY_FUNCTION__);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // 在這裡寫你的渲染邏輯，例如：
-    // glBindVertexArray(_M_vao);
     _M_prog->bind();
+    QMatrix4x4 matrix;
+    // 繞 Z 軸旋轉
+    matrix.rotate(_M_angle, 0, 0, 1);
+    _M_prog->setUniformValue("aMat", matrix);
     _M_vao.bind();
     glDrawArrays(GL_TRIANGLES, 0, 3);
     _M_vao.release();
     _M_prog->release();
+    update();
+    _M_angle += 0.01;
 }
