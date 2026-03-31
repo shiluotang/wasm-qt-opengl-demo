@@ -69,20 +69,32 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::HandleOpen() {
-    LOGD("clicked open action");
-    QFileDialog dlg;
-    dlg.setModal(true);
-    auto h = std::bind(
-            &MainWindow::HandleOpenFileContent,
-            this,
-            std::placeholders::_1,
-            std::placeholders::_2);
-    dlg.getOpenFileContent("Files (*.*)", h);
+    LOGD(__PRETTY_FUNCTION__);
+    // it MUST be a heap object to prevent immediate destroy after
+    // QFileDialog::open()
+    QFileDialog *dlg_ptr = new QFileDialog(this);
+    dlg_ptr->setModal(true);
+    dlg_ptr->setFileMode(QFileDialog::ExistingFile);
+    // QFileDialog::openFileContent() will load all content into memory which is
+    // really bad idea for loading large file
+    // auto h = std::bind(
+    //         &MainWindow::HandleOpenFileContent,
+    //         this,
+    //         std::placeholders::_1,
+    //         std::placeholders::_2);
+    QObject::connect(dlg_ptr, &QFileDialog::accepted, [this, dlg_ptr]() {
+                if (!!dlg_ptr)
+                    this->HandleFileDialogAccepted(*dlg_ptr);
+                dlg_ptr->deleteLater();
+            });
+    // You WILL NOT see the local filesystem in wasm!!!
+    dlg_ptr->open();
 }
 
 void MainWindow::HandleOpenFileContent(
         QString const &filename,
         QByteArray const &ba) {
+    LOGD(__PRETTY_FUNCTION__);
     LOGD("file " << filename.toLocal8Bit().constData() << " content is ready");
     QWidget *w = this->centralWidget();
     LOGD("this->centralWidget() = " << w);
@@ -91,13 +103,25 @@ void MainWindow::HandleOpenFileContent(
 }
 
 void MainWindow::HandleClose() {
-    LOGD("clicked close action");
+    LOGD(__PRETTY_FUNCTION__);
     QWidget *w = this->takeCentralWidget();
     if (!!w)
         w->deleteLater();
 }
 
 void MainWindow::HandleQuit() {
-    LOGD("clicked quit action");
+    LOGD(__PRETTY_FUNCTION__);
     this->close();
+}
+
+void MainWindow::HandleFileDialogAccepted(QFileDialog const &dlg) {
+    LOGD(__PRETTY_FUNCTION__);
+    QStringList const &files = dlg.selectedFiles();
+    for (int i = 0, n = files.size(); i < n; ++i) {
+        LOGD("selected file #" << i << " " << files.at(i).toLocal8Bit().constData());
+    }
+    QWidget *w = this->centralWidget();
+    LOGD("this->centralWidget() = " << w);
+    if (!w)
+        initRenderPart();
 }

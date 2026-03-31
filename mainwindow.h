@@ -2,6 +2,7 @@
 #define MAINWINDOW_H_INCLUDED
 
 #include <QMainWindow>
+#include <QFileDialog>
 
 class MainWindow
     : public QMainWindow {
@@ -19,6 +20,8 @@ protected:
     void HandleOpen();
 
     void HandleOpenFileContent(QString const &filename, QByteArray const &ba);
+
+    void HandleFileDialogAccepted(QFileDialog const &dlg);
 
     void HandleClose();
 
