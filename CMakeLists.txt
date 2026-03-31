@@ -14,6 +14,7 @@ qt_standard_project_setup()
 qt_add_executable(${PROJECT_NAME}
     app.cc
     mywindow.cc
+    mainwindow.cc
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Core

@@ -7,5 +7,5 @@ wasm {
     # QMAKE_LFLAGS += --use-port=sdl2
 }
 
-SOURCES = app.cc mywindow.cc
+SOURCES = app.cc mywindow.cc mainwindow.cc
 HEADERS = mywindow.h

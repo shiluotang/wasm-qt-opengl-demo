@@ -1,52 +1,29 @@
 #ifndef MAINWINDOW_H_INCLUDED
 #define MAINWINDOW_H_INCLUDED
 
-#include <iostream>
-
 #include <QMainWindow>
-#include <QVBoxLayout>
-#include <QMenuBar>
-#include <QWidget>
-
-#include "mywindow.h"
-
-#include "logger.h"
 
 class MainWindow
     : public QMainWindow {
 public:
-    MainWindow() {
-        // 1 表示開啟 VSync，0 表示關閉
-        QSurfaceFormat format;
-        format.setSwapInterval(1);
-        QSurfaceFormat::setDefaultFormat(format);
+    MainWindow();
 
-        // 1. 創建 OpenGL 視窗實例
-        MyGLWindow *glWindow = new MyGLWindow();
+    void setVSync(bool enabled);
 
-        // 2. 使用 createWindowContainer 將其轉換為 Widget
-        // 第一個參數是 window 指針，第二個是父組件
-        QWidget *container = QWidget::createWindowContainer(glWindow);
+    void initMenu();
 
-        // 設定容器的最小尺寸，防止佈局塌陷
-        container->setMinimumSize(400, 300);
+    void initRenderPart();
 
-        // 3. 設置 UI 佈局 (例如加入菜單欄)
-        // 如果这里用中文，界面上会变成方框，可能是字体的问题
-        QMenu *fileMenu = menuBar()->addMenu("File");
-        QAction *action = fileMenu->addAction("Close");
-        QObject::connect(action, &QAction::triggered, this,
-                [this]() {
-                    LOGD("clicked");
-                    this->close();
-                });
-        // 4. 將容器放入中心部件
-        QWidget *centralWidget = new QWidget();
-        QVBoxLayout *layout = new QVBoxLayout(centralWidget);
-        // 像普通 Widget 一樣添加
-        layout->addWidget(container);
-        setCentralWidget(centralWidget);
-    }
+    virtual ~MainWindow();
+protected:
+    void HandleOpen();
+
+    void HandleOpenFileContent(QString const &filename, QByteArray const &ba);
+
+    void HandleClose();
+
+    void HandleQuit();
+private:
 };
 
 #endif // MAINWINDOW_H_INCLUDED
