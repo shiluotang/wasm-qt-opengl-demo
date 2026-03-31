@@ -1,15 +1,32 @@
 #include <QtWidgets/QApplication>
+#include <QFontDatabase>
 
 #include "mainwindow.h"
 
 #include "logger.h"
+
+void initDefaultFont() {
+	int fontId = QFontDatabase::addApplicationFont(":/fonts/wqy-zenhei.ttc");
+	if (fontId != -1) {
+		// 2. 獲取該字體文件對應的字體族名稱
+		// 一個字體文件可能包含多個字體族，通常取第一個
+		QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
+		// 3. 創建 QFont 對象並設置為應用程序默認字體
+		QFont defaultFont(family);
+		// 您也可以在這裡設置默認大小，例如 12px
+		defaultFont.setPixelSize(12);
+		QApplication::setFont(defaultFont);
+	} else {
+		LOGD("無法加載字體文件！");
+	}
+}
 
 int main(int argc, char *argv[]) {
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
             Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     LOGD("QApplication app(argc, argv);");
     QApplication app(argc, argv);
-
+    initDefaultFont();
     LOGD("MainWindow w;");
     MainWindow w;
     LOGD("pos.x = " << w.pos().x());

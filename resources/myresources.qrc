@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/frieren.png</file>
+        <file>fonts/wqy-zenhei.ttc</file>
+    </qresource>
+</RCC>

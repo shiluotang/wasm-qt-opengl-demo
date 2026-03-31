@@ -7,7 +7,7 @@
 class MainWindow
     : public QMainWindow {
 public:
-    MainWindow();
+    MainWindow(QWidget *parent = 0);
 
     void setVSync(bool enabled);
 

@@ -1,17 +1,21 @@
-#include <functional>
+// #include <functional>
 
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QWidget>
 #include <QFileDialog>
+#include <QIcon>
 
 #include "mywindow.h"
 #include "logger.h"
 #include "mainwindow.h"
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
     LOGD(__PRETTY_FUNCTION__);
+    this->setWindowIcon(QIcon(":/images/frieren.png"));
     setVSync(true);
     initMenu();
     initRenderPart();
@@ -27,19 +31,19 @@ void MainWindow::setVSync(bool enabled) {
 void MainWindow::initMenu() {
     // 3. 設置 UI 佈局 (例如加入菜單欄)
     // 如果这里用中文，界面上会变成方框，可能是字体的问题
-    QMenu *fileMenu = menuBar()->addMenu("File");
+    QMenu *fileMenu = menuBar()->addMenu("文件");
     QObject::connect(
-            fileMenu->addAction("Open"),
+            fileMenu->addAction("打开"),
             &QAction::triggered,
             this,
             &MainWindow::HandleOpen);
     QObject::connect(
-            fileMenu->addAction("Close"),
+            fileMenu->addAction("关闭"),
             &QAction::triggered,
             this,
             &MainWindow::HandleClose);
     QObject::connect(
-            fileMenu->addAction("Quit"),
+            fileMenu->addAction("退出"),
             &QAction::triggered,
             this,
             &MainWindow::HandleQuit);
@@ -74,9 +78,10 @@ void MainWindow::HandleOpen() {
     // QFileDialog::open()
     QFileDialog *dlg_ptr = new QFileDialog(this);
     dlg_ptr->setModal(true);
-    dlg_ptr->setFileMode(QFileDialog::ExistingFile);
-    // QFileDialog::openFileContent() will load all content into memory which is
-    // really bad idea for loading large file
+    // // in wasm no file exists!!!
+    // dlg_ptr->setFileMode(QFileDialog::ExistingFile);
+    // // QFileDialog::openFileContent() will load all content into memory which is
+    // // really bad idea for loading large file
     // auto h = std::bind(
     //         &MainWindow::HandleOpenFileContent,
     //         this,

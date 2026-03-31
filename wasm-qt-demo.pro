@@ -9,3 +9,4 @@ wasm {
 
 SOURCES = app.cc mywindow.cc mainwindow.cc
 HEADERS = mywindow.h
+RESOURCES = resources/myresources.qrc
