@@ -1,8 +1,5 @@
-#include "mywindow.h"
-
 #include <vector>
 
-/* #include <QtOpenGLWidgets/QOpenGLWidget> */
 #include <QtOpenGL/QOpenGLWindow>
 // 提供 OpenGL API 支持
 #include <QOpenGLFunctions>
@@ -11,6 +8,7 @@
 #include <QOpenGLShaderProgram>
 
 #include "logger.h"
+#include "mywindow.h"
 
 MyGLWindow::MyGLWindow(QWidget *parent)
     : QOpenGLWindow()
@@ -26,8 +24,10 @@ MyGLWindow::MyGLWindow(QWidget *parent)
 MyGLWindow::~MyGLWindow() {
     LOGD(__PRETTY_FUNCTION__);
     makeCurrent();
-    _M_vao.destroy();
-    _M_vbo.destroy();
+    if (_M_vao.isCreated())
+        _M_vao.destroy();
+    if (_M_vbo.isCreated())
+        _M_vbo.destroy();
     if (_M_prog)
         delete _M_prog;
     _M_prog = 0;

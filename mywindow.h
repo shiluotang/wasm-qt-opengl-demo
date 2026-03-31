@@ -31,7 +31,6 @@ protected:
 
     // 3. 繪圖：每當需要重繪時觸發（類似 GLFW 的 while 循環體）
     void paintGL() override;
-
 private:
     std::vector<GLfloat> _M_vertices;
     QOpenGLVertexArrayObject _M_vao;
