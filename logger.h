@@ -16,7 +16,7 @@ std::string timestamp_cxxstr(std::time_t t = std::time(NULL)) {
     return &buffer[0];
 }
 } // namespace anonymous
- 
+
 #define LOGD(x) \
     do { \
         std::ostringstream __logger_oss; \
@@ -26,5 +26,5 @@ std::string timestamp_cxxstr(std::time_t t = std::time(NULL)) {
             << std::endl; \
         std::cout << __logger_oss.str() << std::flush; \
     } while (false)
-
+#define DUMP(x) LOGD(#x << " = " << x)
 #endif // LOGGER_H_INCLUDED

@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>images/frieren.png</file>
         <file>fonts/wqy-zenhei.ttc</file>
+        <file>data/test.dat</file>
     </qresource>
 </RCC>
