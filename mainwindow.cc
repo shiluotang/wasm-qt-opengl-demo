@@ -124,7 +124,22 @@ void MainWindow::HandleFileDialogAccepted(QFileDialog const &dlg) {
     LOGD(__PRETTY_FUNCTION__);
     QStringList const &files = dlg.selectedFiles();
     for (int i = 0, n = files.size(); i < n; ++i) {
-        LOGD("selected file #" << i << " " << files.at(i).toLocal8Bit().constData());
+        std::string filename = files.at(i).toLocal8Bit().toStdString();
+        LOGD("selected file #" << i << " " << filename);
+        char const *mode = "rb";
+        FILE *file = std::fopen(filename.c_str(), mode);
+        LOGD("fopen(" << filename << ", " << mode << ") = " << file);
+        if (!!file) {
+            std::fseek(file, 0, SEEK_END);
+            int fsize = std::ftell(file);
+            LOGD("std::ftell(file = " << file << ") = " << fsize);
+            fsize = std::fmin(fsize, 20);
+            std::fseek(file, 0, SEEK_SET);
+            std::vector<char> buffer(fsize + 1);
+            std::fread(&buffer[0], buffer.size() - 1, 1, file);
+            LOGD("buffer = " << std::string(&buffer[0], fsize));
+            std::fclose(file);
+        }
     }
     QWidget *w = this->centralWidget();
     LOGD("this->centralWidget() = " << w);
