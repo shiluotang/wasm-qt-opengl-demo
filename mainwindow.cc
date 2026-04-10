@@ -88,9 +88,10 @@ void MainWindow::HandleOpen() {
     //         std::placeholders::_1,
     //         std::placeholders::_2);
     QObject::connect(dlg_ptr, &QFileDialog::accepted, [this, dlg_ptr]() {
-                if (!!dlg_ptr)
+                if (!!dlg_ptr) {
                     this->HandleFileDialogAccepted(*dlg_ptr);
-                dlg_ptr->deleteLater();
+                    dlg_ptr->deleteLater();
+                }
             });
     // You WILL NOT see the local filesystem in wasm!!!
     dlg_ptr->open();
