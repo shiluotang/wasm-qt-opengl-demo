@@ -1,4 +1,6 @@
 // #include <functional>
+#include <thread>
+#include <chrono>
 
 #include <QMainWindow>
 #include <QVBoxLayout>
@@ -6,10 +8,70 @@
 #include <QWidget>
 #include <QFileDialog>
 #include <QIcon>
+#include <QTimer>
 
 #include "mywindow.h"
 #include "logger.h"
 #include "mainwindow.h"
+
+namespace {
+
+class Runner {
+    public:
+        virtual void start() = 0;
+        virtual bool intervalRun() = 0;
+    protected:
+    private:
+};
+
+class QTimerRunner
+    : public Runner {
+    public:
+        virtual void start() {
+            QTimer *timer = new QTimer();
+            timer->setInterval(1000);
+            timer->setTimerType(Qt::TimerType::PreciseTimer);
+            QObject::connect(timer, &QTimer::timeout, [this, timer]() {
+                        if (!this->intervalRun()) {
+                            timer->stop();
+                            timer->deleteLater();
+                        }
+                    });
+            timer->start(0);
+        }
+
+        virtual bool intervalRun() {
+            static int counter = 0;
+            LOGD(__PRETTY_FUNCTION__);
+            LOGD("counter = " << counter);
+            return counter++ < 5;
+        }
+    protected:
+    private:
+};
+
+class ThreadRunner
+    : public Runner {
+    public:
+        virtual void start() {
+            std::thread t = std::thread([this]() {
+                        while (this->intervalRun())
+                            std::this_thread::sleep_for(std::chrono::seconds(1));
+                    });
+            t.detach();
+        }
+
+        virtual bool intervalRun() {
+            static int counter = 0;
+            LOGD(__PRETTY_FUNCTION__);
+            LOGD("counter = " << counter);
+            return counter++ < 5;
+        }
+    protected:
+    private:
+};
+
+} // namespace anonymous
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -140,6 +202,8 @@ void MainWindow::HandleFileDialogAccepted(QFileDialog const &dlg) {
             LOGD("buffer = " << std::string(&buffer[0], fsize));
             std::fclose(file);
         }
+        Runner *runner = new ThreadRunner();
+        runner->start();
     }
     QWidget *w = this->centralWidget();
     LOGD("this->centralWidget() = " << w);

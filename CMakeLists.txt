@@ -20,6 +20,7 @@ qt_add_executable(${PROJECT_NAME}
     resources/myresources.qrc
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    png-mt
     Qt::Core
     Qt::Core5Compat
     Qt::Gui

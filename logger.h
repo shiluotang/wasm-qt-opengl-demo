@@ -8,6 +8,8 @@
 #include <vector>
 #include <iostream>
 
+#include <unistd.h>
+
 namespace {
 std::string timestamp_cxxstr(std::time_t t = std::time(NULL)) {
     std::vector<char> buffer(0xff);
@@ -15,12 +17,23 @@ std::string timestamp_cxxstr(std::time_t t = std::time(NULL)) {
     std::strftime(&buffer[0], buffer.size(), "%Y-%m-%d %H:%M:%S %z", tm_ptr);
     return &buffer[0];
 }
+
+int get_pid() {
+    return getpid();
+}
+
+int get_tid() {
+    return gettid();
+}
+
 } // namespace anonymous
 
 #define LOGD(x) \
     do { \
         std::ostringstream __logger_oss; \
         __logger_oss << timestamp_cxxstr() \
+            << " pid #" << get_pid() \
+            << " tid #" << get_tid() \
             << " " << __FILE__ << ":" << __LINE__ \
             << " " << x \
             << std::endl; \
