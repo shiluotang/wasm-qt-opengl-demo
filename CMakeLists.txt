@@ -19,8 +19,10 @@ qt_add_executable(${PROJECT_NAME}
     mainwindow.cc
     resources/myresources.qrc
 )
+if (EMSCRIPTEN)
+    target_link_libraries(${PROJECT_NAME} PRIVATE png-mt)
+endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    png-mt
     Qt::Core
     Qt::Core5Compat
     Qt::Gui

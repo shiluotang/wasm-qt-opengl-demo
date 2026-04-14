@@ -9,6 +9,8 @@
 #include <QFileDialog>
 #include <QIcon>
 #include <QTimer>
+#include <QDockWidget>
+#include <QLabel>
 
 #include "mywindow.h"
 #include "logger.h"
@@ -80,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowIcon(QIcon(":/images/frieren.png"));
     setVSync(true);
     initMenu();
-    initRenderPart();
+    initContent();
 }
 
 void MainWindow::setVSync(bool enabled) {
@@ -109,6 +111,28 @@ void MainWindow::initMenu() {
             &QAction::triggered,
             this,
             &MainWindow::HandleQuit);
+}
+
+void MainWindow::initContent() {
+    this->initRenderPart();
+    this->initSideParts();
+}
+
+void MainWindow::initSideParts() {
+    // 2. 左侧浮动窗体
+    QDockWidget *leftDock = new QDockWidget("左侧菜单", this);
+    leftDock->setWidget(new QLabel(" [左侧内容] "));
+    addDockWidget(Qt::LeftDockWidgetArea, leftDock);
+
+    // 3. 右侧浮动窗体
+    QDockWidget *rightDock = new QDockWidget("右侧工具", this);
+    rightDock->setWidget(new QLabel(" [右侧内容] "));
+    addDockWidget(Qt::RightDockWidgetArea, rightDock);
+
+    // 允许嵌套和悬浮（默认开启）
+    setDockOptions(QMainWindow::AllowNestedDocks
+            | QMainWindow::AnimatedDocks
+            | QMainWindow::AllowTabbedDocks);
 }
 
 void MainWindow::initRenderPart() {

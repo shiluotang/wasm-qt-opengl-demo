@@ -13,6 +13,8 @@ public:
 
     void initMenu();
 
+    void initContent();
+    void initSideParts();
     void initRenderPart();
 
     virtual ~MainWindow();
