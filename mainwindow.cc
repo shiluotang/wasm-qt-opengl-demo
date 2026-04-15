@@ -145,13 +145,13 @@ void MainWindow::initRenderPart() {
     QWidget *container = QWidget::createWindowContainer(glWindow, this);
     // 設定容器的最小尺寸，防止佈局塌陷
     container->setMinimumSize(400, 300);
-    // 4. 將容器放入中心部件
-    QWidget *centralWidget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
-    // 像普通 Widget 一樣添加
-    layout->addWidget(container);
-    LOGD("this->setCentralWidget(centralWidget = " << centralWidget << ")");
-    setCentralWidget(centralWidget);
+    // // 4. 將容器放入中心部件
+    // QWidget *centralWidget = new QWidget();
+    // QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    // // 像普通 Widget 一樣添加
+    // layout->addWidget(container);
+    // LOGD("this->setCentralWidget(centralWidget = " << centralWidget << ")");
+    setCentralWidget(container);
 }
 
 MainWindow::~MainWindow() {
