@@ -12,8 +12,9 @@
 #include <QDockWidget>
 #include <QLabel>
 
+#include <logger.h>
+
 #include "mywindow.h"
-#include "logger.h"
 #include "mainwindow.h"
 
 namespace {

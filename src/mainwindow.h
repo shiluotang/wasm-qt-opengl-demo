@@ -5,7 +5,9 @@
 #include <QFileDialog>
 
 class MainWindow
-    : public QMainWindow {
+    : public QMainWindow
+{
+    Q_OBJECT
 public:
     MainWindow(QWidget *parent = 0);
 

@@ -7,7 +7,8 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 
-#include "logger.h"
+#include <logger.h>
+
 #include "mywindow.h"
 
 MyGLWindow::MyGLWindow(QWidget *parent)

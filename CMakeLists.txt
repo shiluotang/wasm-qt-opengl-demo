@@ -14,11 +14,17 @@ find_package(Qt6 REQUIRED COMPONENTS Core5Compat Gui OpenGLWidgets Widgets)
 qt_standard_project_setup()
 
 qt_add_executable(${PROJECT_NAME}
-    app.cc
-    mywindow.cc
-    mainwindow.cc
+    src/app.cc
+    src/mywindow.cc
+    src/mainwindow.cc
+    ## header file in the same directory can be find out automatically
+    ## otherwise it must be include explicitly for qt moc procedure
+    # src/mywindow.h
+    # src/mainwindow.h
     resources/myresources.qrc
 )
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
 if (EMSCRIPTEN)
     target_link_libraries(${PROJECT_NAME} PRIVATE png-mt)
 endif()
