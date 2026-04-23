@@ -3,15 +3,12 @@
 
 #include <vector>
 
-/* #include <QtOpenGLWidgets/QOpenGLWidget> */
-#include <QtOpenGL/QOpenGLWindow>
+#include <QOpenGLWindow>
 // 提供 OpenGL API 支持
 #include <QOpenGLFunctions>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
-
-QT_FORWARD_DECLARE_CLASS(QWidget);
 
 class MyGLWindow
     : public QOpenGLWindow
@@ -31,6 +28,8 @@ protected:
 
     // 3. 繪圖：每當需要重繪時觸發（類似 GLFW 的 while 循環體）
     void paintGL() override;
+
+    void mousePressEvent(QMouseEvent *event) override;
 private:
     std::vector<GLfloat> _M_vertices;
     QOpenGLVertexArrayObject _M_vao;

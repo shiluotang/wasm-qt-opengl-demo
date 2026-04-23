@@ -1,11 +1,13 @@
 #include <vector>
 
-#include <QtOpenGL/QOpenGLWindow>
+#include <QOpenGLWindow>
 // 提供 OpenGL API 支持
 #include <QOpenGLFunctions>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
+#include <QMouseEvent>
+#include <QMenu>
 
 #include <logger.h>
 
@@ -115,4 +117,20 @@ void MyGLWindow::paintGL() {
     _M_vao.release();
     _M_prog->release();
     _M_angle += 0.1;
+}
+
+void MyGLWindow::mousePressEvent(QMouseEvent *event) {
+    if (event->button() == Qt::RightButton) {
+        QMenu *menu = new QMenu();
+        QObject::connect(menu, &QMenu::aboutToHide, menu, &QObject::deleteLater);
+        menu->addAction("啊啊", this, []() { LOGD("xyz"); })
+            ->setWhatsThis("xyz");
+        menu->addAction("嗯嗯", this, []() { LOGD("uvw"); })
+            ->setWhatsThis("uvw");
+        // 直接使用 event->globalPos()，无需手动转换
+        menu->popup(event->globalPosition().toPoint());
+    } else {
+        // call super type handle
+        QOpenGLWindow::mousePressEvent(event);
+    }
 }
